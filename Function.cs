@@ -1,5 +1,6 @@
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
@@ -16,7 +17,7 @@ public class Function
     /// <param name="input"></param>
     /// <param name="context"></param>
     /// <returns></returns>
-    public async Task<User> FunctionHandler(Guid input, ILambdaContext context)
+    public async Task<User> FunctionHandler(APIGatewayHttpApiV2ProxyRequest input, ILambdaContext context)
     {
         var dynamoDBContext = new DynamoDBContext(new AmazonDynamoDBClient());
         var user = await dynamoDBContext.LoadAsync<User>(input);
