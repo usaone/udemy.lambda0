@@ -17,10 +17,13 @@ public class Function
     /// <param name="input"></param>
     /// <param name="context"></param>
     /// <returns></returns>
-    public async Task<User> FunctionHandler(APIGatewayHttpApiV2ProxyRequest input, ILambdaContext context)
+    public async Task<User> FunctionHandler(APIGatewayHttpApiV2ProxyRequest request, ILambdaContext context)
     {
+        request.PathParameters.TryGetValue("userId", out var userIdString);
+        Guid.TryParse(userIdString, out var userId);
+
         var dynamoDBContext = new DynamoDBContext(new AmazonDynamoDBClient());
-        var user = await dynamoDBContext.LoadAsync<User>(input);
+        var user = await dynamoDBContext.LoadAsync<User>(userId);
 
         return user;
     }
